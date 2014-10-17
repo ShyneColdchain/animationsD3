@@ -28,11 +28,41 @@ var y = d3.scale.linear()
     .range([height, 0]);
 	
 // construct circles 
-var jsonCircles = [ 
+/*var jsonCircles = [ 
 	{ "x": 50, "y": 50, "r": 20, "color" : "red"},
 	{ "x": 150, "y": 150, "r": 20, "color" : "purple"},
-	{ "x": 350, "y": 350, "r": 20, "color" : "blue"}
-];
+	{ "x": 350, "y": 350, "r": 20, "color" : "blue"},
+	{ "x": 75, "y": 75, "r": 20, "color" : "blue"},
+	{ "x": 175, "y": 175, "r": 20, "color" : "white"},
+	{ "x": 250, "y": 450, "r": 20, "color" : "pink"},
+	{ "x": 400, "y": 50, "r": 20, "color": "darkblue"}
+];*/
+
+// randomly generate circles 
+
+var rando = 500; // number of circles 
+
+var randX = [];
+var randY = [];
+var i;
+
+for (i = 0; i < rando; i++) { 
+	var newX = Math.round(Math.random() * width);
+	var newY = Math.round(Math.random() * height); // fill screen
+	randX.push(newX);
+	randY.push(newY);
+}
+
+// plan circles 
+var data = {
+	"randX" : [randX],
+	"randY" : [randY]
+};
+
+console.log(data);
+console.log(data.randX);
+console.log(data.randX[0]);
+console.log(randX);
 
 // svg canvas to build on 	
 var canvas = d3.select("body").append("svg")
@@ -40,18 +70,31 @@ var canvas = d3.select("body").append("svg")
 	.attr("height", height + margin.top + margin.bottom);
 
 // construct circles 
-var circles = canvas.selectAll("circle")
-	.data(jsonCircles)
-	.enter()
-	.append("circle")
-	
-	circles
-		.attr("cx", function (d) { return d.x; })
-		.attr("cy", function (d) { return d.y; })
-		.attr("r", function (d) { return d.r; })
-		.style("fill", function (d) { return d.color; });
-
-	
+var circle = canvas.selectAll("circle")
+		//.data(data, function(d) { return d.randX; })
+		.data(randX, function (d) { return d; })
+		.enter()
+		.append("circle")
+		
+	circle
+		.attr("cx", function (d, i) { return i; })
+		.attr("cy", 300)
+		//.attr("cy", function (d, i) { return i; })
+		.attr("r", function (d) { return Math.sqrt(d); })
+		//.style("fill", function (d) { return d.color; })
+		.style("fill", "purple");
+		
+		console.log(circle.data[0]);
+		
+	// expand circle r - animation
+	circle
+		.on("click", function (d) { 
+			d3.select(this)
+			.transition()
+			.duration(5000)
+			.attr("r", 100); });
+			//.attr("r", d.r * 3); });
+			
 
 
 </script>
