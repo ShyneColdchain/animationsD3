@@ -4,8 +4,16 @@
 <style>
 
 body {
-	background-color: hsla(292, 100%, 79%, 0.4);
+	background-color: hsla(295, 50%, 79%, 0.3);
 	font: sans-serif;
+}
+
+.header {
+	position: center;
+}
+
+.circle {
+	fill: hsla(200, 50%, 50%, 0.7);
 }
 
 footer {
@@ -36,21 +44,13 @@ var y = d3.scale.linear()
     .domain([0, 100])
     .range([height, 0]);
 	
-// construct circles 
-/*var jsonCircles = [ 
-	{ "x": 50, "y": 50, "r": 20, "color" : "red"},
-	{ "x": 150, "y": 150, "r": 20, "color" : "purple"},
-	{ "x": 350, "y": 350, "r": 20, "color" : "blue"},
-	{ "x": 75, "y": 75, "r": 20, "color" : "blue"},
-	{ "x": 175, "y": 175, "r": 20, "color" : "white"},
-	{ "x": 250, "y": 450, "r": 20, "color" : "pink"},
-	{ "x": 400, "y": 50, "r": 20, "color": "darkblue"}
-];*/
+var color = d3.scale.linear() 
+	.domain([0, width])
+	.range(["red", "blue"]);
 
 // randomly generate circles 
 
 var rando = 500; // number of circles 
-console.log(rando);
 
 var randX = [];
 var randY = [];
@@ -83,6 +83,7 @@ var circle = canvas.selectAll("circle")
 	circle
 		.enter()
 		.append("circle")
+		.attr("class", "circle")
 		.attr("cx", function (d) { 
 			return (Math.random() * (widthTrue - padding * 1.2)) 
 			+ padding / 2; })
@@ -90,9 +91,9 @@ var circle = canvas.selectAll("circle")
 			return (Math.random() * (heightTrue - padding * 1.2)) 
 			+ padding / 2; })
 		//.attr("cy", function (d, i) { return i; })
-		.attr("r", function (d) { return Math.sqrt(d) * 0.5; })
-		//.style("fill", function (d) { return d.color; })
-		.style("fill", "purple");
+		.attr("r", function (d) { return Math.sqrt(d) * 0.5; });
+		//.style("fill", function (d) { return d.color; });
+		//.style("fill", "purple");
 		
 	// expand circle r - animation
 	circle
@@ -100,16 +101,21 @@ var circle = canvas.selectAll("circle")
 			d3.select(this)
 			.transition()
 			.duration(5000)
-			.attr("r", 50); });
+			.ease("elastic")
+			.attr("r", function(i) {
+				return Math.sqrt(i) * 2;
+			}); });
+			//.attr("r", 50); });
 			//.attr("r", d.r * 3); });
-			
-
 
 </script>
 
-<h2>Click each circle to enlarge</h2>
 
-<p>500 randomly generated circles with randomly generated sizes (radius).</p>
+<header>
+	<h2>Click each circle to enlarge</h2>
+
+	<p>500 randomly generated circles with randomly generated sizes (radius).</p>
+</header?>
 
 <footer>
 	<aside>Oct, 16, 2014 - Oliver Muellerklein</aside>
