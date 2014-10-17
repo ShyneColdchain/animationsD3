@@ -5,6 +5,12 @@
 
 body {
 	background-color: hsla(292, 100%, 79%, 0.4);
+	font: sans-serif;
+}
+
+footer {
+	position: absolute;
+	font: 10px sans-serif;
 }
 
 </style>
@@ -16,9 +22,12 @@ body {
 /* d3 code */ 
 
 var margin = {top: 20, right: 30, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
+	widthTrue = 960,
+	heightTrue = 500,
+    width = widthTrue - margin.left - margin.right,
+    height = heightTrue - margin.top - margin.bottom
+	padding = 30;
+	
 var x = d3.scale.linear()
     .domain([0, 100])
     .range([0, width]);
@@ -41,6 +50,7 @@ var y = d3.scale.linear()
 // randomly generate circles 
 
 var rando = 500; // number of circles 
+console.log(rando);
 
 var randX = [];
 var randY = [];
@@ -55,14 +65,9 @@ for (i = 0; i < rando; i++) {
 
 // plan circles 
 var data = {
-	"randX" : [randX],
-	"randY" : [randY]
+	"randX" : randX,
+	"randY" : randY
 };
-
-console.log(data);
-console.log(data.randX);
-console.log(data.randX[0]);
-console.log(randX);
 
 // svg canvas to build on 	
 var canvas = d3.select("body").append("svg")
@@ -71,20 +76,23 @@ var canvas = d3.select("body").append("svg")
 
 // construct circles 
 var circle = canvas.selectAll("circle")
-		//.data(data, function(d) { return d.randX; })
-		.data(randX, function (d) { return d; })
-		.enter()
-		.append("circle")
+		//.data(randX)
+		//.data([216, 58], function(d) { return d; });
+		.data(randX, function(d) { return d; });
 		
 	circle
-		.attr("cx", function (d, i) { return i; })
-		.attr("cy", 300)
+		.enter()
+		.append("circle")
+		.attr("cx", function (d) { 
+			return (Math.random() * (widthTrue - padding * 1.2)) 
+			+ padding / 2; })
+		.attr("cy", function(d) { 
+			return (Math.random() * (heightTrue - padding * 1.2)) 
+			+ padding / 2; })
 		//.attr("cy", function (d, i) { return i; })
-		.attr("r", function (d) { return Math.sqrt(d); })
+		.attr("r", function (d) { return Math.sqrt(d) * 0.5; })
 		//.style("fill", function (d) { return d.color; })
 		.style("fill", "purple");
-		
-		console.log(circle.data[0]);
 		
 	// expand circle r - animation
 	circle
@@ -92,11 +100,22 @@ var circle = canvas.selectAll("circle")
 			d3.select(this)
 			.transition()
 			.duration(5000)
-			.attr("r", 100); });
+			.attr("r", 50); });
 			//.attr("r", d.r * 3); });
 			
 
 
 </script>
 
-</body>
+<h2>Click each circle to enlarge</h2>
+
+<p>500 randomly generated circles with randomly generated sizes (radius).</p>
+
+<footer>
+	<aside>Oct, 16, 2014 - Oliver Muellerklein</aside>
+</footer>
+
+
+
+
+
